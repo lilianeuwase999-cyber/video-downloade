@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniSave — Multi-Platform Video & Audio Downloader</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-effect {
+            box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.3);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased selection:bg-brand-500 selection:text-white min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                
+                <!-- Brand Logo -->
+                <a href="#hero" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-download text-lg"></i>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-tight text-white">
+                        Omni<span class="text-brand-500">Save</span>
+                    </span>
+                </a>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-8 font-medium text-sm">
+                    <a href="#hero" class="text-slate-300 hover:text-brand-400 transition-colors">Downloader</a>
+                    <a href="#platforms" class="text-slate-300 hover:text-brand-400 transition-colors">Supported Platforms</a>
+                    <a href="#features" class="text-slate-300 hover:text-brand-400 transition-colors">Features</a>
+                    <a href="#faq" class="text-slate-300 hover:text-brand-400 transition-colors">FAQ</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center space-x-3">
+                    <a href="#hero" class="hidden sm:inline-flex items-center px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-sm font-semibold shadow-lg shadow-brand-500/20 transition-all hover:shadow-brand-500/40">
+                        <i class="fas fa-bolt mr-2 text-xs"></i> Fast Fetch
+                    </a>
+                    <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden p-2 rounded-xl text-slate-300 hover:bg-slate-800 focus:outline-none">
+                        <i class="fas fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-b border-slate-800 bg-slate-900/95 backdrop-blur-md px-4 pt-2 pb-6 space-y-3">
+            <a href="#hero" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800">Downloader</a>
+            <a href="#platforms" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800">Supported Platforms</a>
+            <a href="#features" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800">Features</a>
+            <a href="#faq" class="mobile-nav-link block px-3 py-2 rounded-lg text-base font-medium text-slate-200 hover:bg-slate-800">FAQ</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="relative pt-12 pb-20 overflow-hidden">
+            <!-- Background Ambient Lights -->
+            <div class="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-brand-500/15 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+            <div class="absolute top-40 right-10 w-72 h-72 bg-purple-500/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+                
+                <!-- Badge -->
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-900/80 border border-slate-800 text-brand-400 text-xs sm:text-sm font-semibold shadow-inner">
+                    <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Supports 4K HD Downloads & MP3 Conversions</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-tight">
+                    Download Any Video from <br class="hidden sm:inline">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-300 to-purple-400">YouTube, TikTok & Instagram</span>
+                </h1>
+                
+                <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto font-normal">
+                    Paste your video link below to fetch high-speed downloads in MP4, MP3, and No-Watermark formats.
+                </p>
+
+                <!-- Downloader Box -->
+                <div class="glass-card p-4 sm:p-6 rounded-3xl shadow-2xl max-w-3xl mx-auto border border-slate-800 glow-effect text-left">
+                    <form id="fetch-form" class="space-y-4">
+                        <div class="relative flex items-center">
+                            
+                            <!-- Detected Platform Icon Preview -->
+                            <div class="absolute left-4 text-xl text-slate-500 flex items-center justify-center transition-all duration-300" id="platform-icon-container">
+                                <i class="fas fa-link" id="platform-icon"></i>
+                            </div>
+
+                            <!-- Input Box -->
+                            <input 
+                                type="url" 
+                                id="video-url" 
+                                required
+                                placeholder="Paste video link here (e.g. YouTube, TikTok, Instagram, X...)" 
+                                class="w-full pl-12 pr-32 py-4 rounded-2xl bg-slate-900/90 border border-slate-700/80 text-white placeholder-slate-500 text-sm sm:text-base focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
+                            >
+
+                            <!-- Paste Button -->
+                            <button 
+                                type="button" 
+                                id="paste-btn"
+                                class="absolute right-3 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold transition-all flex items-center space-x-1.5"
+                                title="Paste link from clipboard"
+                            >
+                                <i class="far fa-clipboard text-xs"></i>
+                                <span>Paste</span>
+                            </button>
+                        </div>
+
+                        <!-- Action Submit Button -->
+                        <button 
+                            type="submit" 
+                            id="fetch-submit-btn"
+                            class="w-full py-4 rounded-2xl bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-bold text-base shadow-lg shadow-brand-500/25 transition-all hover:scale-[1.01] flex items-center justify-center space-x-2"
+                        >
+                            <i class="fas fa-circle-notch fa-spin hidden" id="spinner"></i>
+                            <span id="btn-text">Fetch Video & Audio Options</span>
+                            <i class="fas fa-arrow-right text-sm" id="btn-arrow"></i>
+                        </button>
+                    </form>
+
+                    <!-- Platform Quick Badges -->
+                    <div class="mt-4 flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-400 pt-2 border-t border-slate-800/60">
+                        <span class="font-medium text-slate-500">Auto Detects:</span>
+                        <span class="flex items-center space-x-1"><i class="fab fa-youtube text-red-500"></i><span>YouTube</span></span>
+                        <span class="flex items-center space-x-1"><i class="fab fa-tiktok text-cyan-400"></i><span>TikTok</span></span>
+                        <span class="flex items-center space-x-1"><i class="fab fa-instagram text-pink-500"></i><span>Instagram</span></span>
+                        <span class="flex items-center space-x-1"><i class="fab fa-x-twitter text-slate-200"></i><span>Twitter / X</span></span>
+                        <span class="flex items-center space-x-1"><i class="fab fa-facebook text-blue-500"></i><span>Facebook</span></span>
+                    </div>
+                </div>
+
+                <!-- Processing & Media Metadata Card Container -->
+                <div id="media-results-container" class="max-w-3xl mx-auto pt-6 hidden">
+                    
+                    <!-- Loading Skeleton State -->
+                    <div id="loading-skeleton" class="glass-card p-6 rounded-3xl border border-slate-800 animate-pulse space-y-4 text-left hidden">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="w-full sm:w-48 h-32 bg-slate-800 rounded-2xl"></div>
+                            <div class="flex-1 space-y-3">
+                                <div class="h-4 bg-slate-800 rounded w-3/4"></div>
+                                <div class="h-3 bg-slate-800 rounded w-1/2"></div>
+                                <div class="h-3 bg-slate-800 rounded w-1/4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fetched Result Card -->
+                    <div id="result-card" class="glass-card p-6 rounded-3xl border border-slate-800 text-left space-y-6">
+                        
+                        <!-- Media Header & Video Preview Section -->
+                        <div class="space-y-4">
+                            <!-- Platform & Details Header -->
+                            <div class="flex items-center justify-between">
+                                <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold" id="res-badge">
+                                    <i class="fab fa-youtube text-red-500 text-sm" id="res-platform-icon"></i>
+                                    <span id="res-platform-name">YouTube Video</span>
+                                </div>
+                                <span class="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                                    <i class="fas fa-eye"></i> Live Preview Ready
+                                </span>
+                            </div>
+
+                            <div class="space-y-1">
+                                <h3 id="res-title" class="text-xl font-bold text-white truncate">Sample High Quality Video Title</h3>
+                                <p id="res-author" class="text-xs text-slate-400 flex items-center space-x-1">
+                                    <i class="far fa-user text-slate-500"></i>
+                                    <span>Creator / Channel Name</span>
+                                </p>
+                            </div>
+
+                            <!-- Embedded HTML5 Video Preview Player -->
+                            <div class="relative w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-xl group">
+                                <video id="preview-video-player" controls preload="metadata" class="w-full h-full object-contain bg-black">
+                                    <source id="preview-video-source" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                                    Your browser does not support HTML5 video preview.
+                                </video>
+                            </div>
+                        </div>
+
+                        <!-- Options Tabs -->
+                        <div class="border-b border-slate-800">
+                            <div class="flex space-x-6 text-sm font-semibold">
+                                <button class="tab-btn active text-brand-400 border-b-2 border-brand-500 pb-3" data-tab="video-options">
+                                    <i class="fas fa-video mr-1.5"></i> Video (MP4)
+                                </button>
+                                <button class="tab-btn text-slate-400 hover:text-slate-200 border-b-2 border-transparent pb-3" data-tab="audio-options">
+                                    <i class="fas fa-music mr-1.5"></i> Audio Only (MP3)
+                                </button>
+                                <button class="tab-btn text-slate-400 hover:text-slate-200 border-b-2 border-transparent pb-3 hidden" id="watermark-tab" data-tab="nowatermark-options">
+                                    <i class="fas fa-magic mr-1.5"></i> No Watermark
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content 1: Video MP4 -->
+                        <div id="video-options" class="tab-content space-y-3">
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 font-bold text-xs border border-emerald-500/20">1080p Full HD</span>
+                                    <span class="text-xs text-slate-400">MP4 format (~45.2 MB)</span>
+                                </div>
+                                <button class="download-trigger px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-all shadow-md shadow-brand-500/20 flex items-center space-x-1.5">
+                                    <i class="fas fa-download"></i>
+                                    <span>Download</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 font-bold text-xs border border-blue-500/20">720p HD</span>
+                                    <span class="text-xs text-slate-400">MP4 format (~22.8 MB)</span>
+                                </div>
+                                <button class="download-trigger px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition-all shadow-md shadow-brand-500/20 flex items-center space-x-1.5">
+                                    <i class="fas fa-download"></i>
+                                    <span>Download</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-md bg-slate-500/10 text-slate-400 font-bold text-xs border border-slate-500/20">480p SD</span>
+                                    <span class="text-xs text-slate-400">MP4 format (~12.1 MB)</span>
+                                </div>
+                                <button class="download-trigger px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all flex items-center space-x-1.5">
+                                    <i class="fas fa-download"></i>
+                                    <span>Download</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content 2: Audio MP3 -->
+                        <div id="audio-options" class="tab-content space-y-3 hidden">
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 font-bold text-xs border border-purple-500/20">320 kbps</span>
+                                    <span class="text-xs text-slate-400">High Quality MP3 Audio</span>
+                                </div>
+                                <button class="download-trigger px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition-all shadow-md shadow-purple-500/20 flex items-center space-x-1.5">
+                                    <i class="fas fa-music"></i>
+                                    <span>Extract Audio</span>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-md bg-slate-500/10 text-slate-400 font-bold text-xs border border-slate-500/20">128 kbps</span>
+                                    <span class="text-xs text-slate-400">Standard MP3 Audio</span>
+                                </div>
+                                <button class="download-trigger px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition-all flex items-center space-x-1.5">
+                                    <i class="fas fa-music"></i>
+                                    <span>Extract Audio</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tab Content 3: TikTok No Watermark -->
+                        <div id="nowatermark-options" class="tab-content space-y-3 hidden">
+                            <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-400 font-bold text-xs border border-cyan-500/20">No Watermark HD</span>
+                                    <span class="text-xs text-slate-400">Clean TikTok Original MP4</span>
+                                </div>
+                                <button class="download-trigger px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold transition-all shadow-md shadow-cyan-500/20 flex items-center space-x-1.5">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                    <span>Download Clean</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar Simulation (Triggers on click) -->
+                        <div id="download-progress-container" class="hidden space-y-2 pt-2">
+                            <div class="flex justify-between text-xs font-semibold">
+                                <span id="progress-status-text" class="text-brand-400">Preparing download...</span>
+                                <span id="progress-percentage" class="text-slate-400">0%</span>
+                            </div>
+                            <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                                <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-500 to-purple-500 w-0 transition-all duration-200"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Supported Platforms Section -->
+        <section id="platforms" class="py-16 bg-slate-900/50 border-y border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold tracking-widest text-brand-400 uppercase mb-2">Compatibility</h2>
+                    <p class="text-3xl font-extrabold text-white">Supported Platforms & Features</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- YouTube Card -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-500 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">YouTube Downloader</h3>
+                        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Save videos in 4K, 1080p, and convert YouTube playlists to high-quality 320kbps MP3 audio.</p>
+                    </div>
+
+                    <!-- TikTok Card -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">TikTok No Watermark</h3>
+                        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Download TikTok videos without logo watermark. Extract background music and audio easily.</p>
+                    </div>
+
+                    <!-- Instagram Card -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 text-pink-500 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Instagram Reels & Stories</h3>
+                        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Download Reels, IGTV, Photos, and Stories directly to your mobile or desktop device.</p>
+                    </div>
+
+                    <!-- Twitter / X Card -->
+                    <div class="glass-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-slate-200/10 text-slate-200 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fab fa-x-twitter"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Twitter / X Media</h3>
+                        <p class="text-slate-400 text-xs mt-2 leading-relaxed">Extract videos and GIFs attached to tweets with high speed resolution options.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold tracking-widest text-brand-400 uppercase mb-2">Why OmniSave?</h2>
+                    <p class="text-3xl font-extrabold text-white">Fast, Free, & Secure Media Downloader</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center p-6 space-y-3">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-2xl mx-auto mb-4">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Lightning Fast</h3>
+                        <p class="text-slate-400 text-sm">Direct server connections ensure maximum bandwidth speed for instant video downloads.</p>
+                    </div>
+
+                    <div class="text-center p-6 space-y-3">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-2xl mx-auto mb-4">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">100% Safe & Private</h3>
+                        <p class="text-slate-400 text-sm">No user accounts required. We do not store downloaded videos or track user history.</p>
+                    </div>
+
+                    <div class="text-center p-6 space-y-3">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 text-brand-400 flex items-center justify-center text-2xl mx-auto mb-4">
+                            <i class="fas fa-mobile-screen"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Cross Platform</h3>
+                        <p class="text-slate-400 text-sm">Works seamlessly across Chrome, Safari, iOS, Android, macOS, Windows, and Linux.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="py-16 bg-slate-900/50 border-t border-slate-800/80">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-xs font-bold tracking-widest text-brand-400 uppercase mb-2">Help Center</h2>
+                    <p class="text-3xl font-extrabold text-white">Frequently Asked Questions</p>
+                </div>
+
+                <div class="space-y-4" id="faq-accordion">
+                    
+                    <!-- Question 1 -->
+                    <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:text-brand-400 transition-colors">
+                            <span>Is OmniSave completely free to use?</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden text-sm text-slate-400 leading-relaxed border-t border-slate-800/60 pt-3">
+                            Yes, OmniSave is 100% free with no hidden subscriptions, limits, or registration requirements.
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:text-brand-400 transition-colors">
+                            <span>How do I download TikTok videos without watermark?</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden text-sm text-slate-400 leading-relaxed border-t border-slate-800/60 pt-3">
+                            Simply copy the link of the TikTok video, paste it into the search box above, and choose the "No Watermark" tab to download the clean video file.
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:text-brand-400 transition-colors">
+                            <span>Where are the downloaded files saved on my device?</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden text-sm text-slate-400 leading-relaxed border-t border-slate-800/60 pt-3">
+                            Downloaded files are automatically saved in your default browser "Downloads" folder or files app on mobile devices.
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="glass-card rounded-2xl border border-slate-800 overflow-hidden">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:text-brand-400 transition-colors">
+                            <span>Is downloading online videos legal?</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-300"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden text-sm text-slate-400 leading-relaxed border-t border-slate-800/60 pt-3">
+                            OmniSave is intended for personal media backup and fair-use content creation. Always respect copyright laws and content creators' rights when downloading media.
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <!-- Brand -->
+                <a href="#hero" class="flex items-center space-x-2">
+                    <span class="font-extrabold text-lg text-white">Omni<span class="text-brand-500">Save</span></span>
+                </a>
+                <!-- Footer Links -->
+                <div class="flex flex-wrap justify-center space-x-6 text-xs text-slate-400">
+                    <a href="#" class="hover:text-slate-200 transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-slate-200 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-200 transition-colors">DMCA Disclaimer</a>
+                    <a href="#" class="hover:text-slate-200 transition-colors">Contact Support</a>
+                </div>
+            </div>
+            
+            <p class="text-center text-xs text-slate-600 leading-relaxed">
+                Disclaimer: OmniSave is not affiliated with, endorsed by, or associated with YouTube, TikTok, Instagram, Twitter/X, or Facebook. All trademarks belong to their respective owners.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="glass-card bg-slate-900/95 border border-slate-700 px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-sm text-slate-200">
+            <i class="fas fa-check-circle text-emerald-400 text-lg" id="toast-icon"></i>
+            <span id="toast-msg">Download started successfully!</span>
+        </div>
+    </div>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // DOM Elements
+        const urlInput = document.getElementById('video-url');
+        const platformIcon = document.getElementById('platform-icon');
+        const pasteBtn = document.getElementById('paste-btn');
+        const fetchForm = document.getElementById('fetch-form');
+        const fetchSubmitBtn = document.getElementById('fetch-submit-btn');
+        const spinner = document.getElementById('spinner');
+        const btnText = document.getElementById('btn-text');
+        const btnArrow = document.getElementById('btn-arrow');
+        
+        const mediaResultsContainer = document.getElementById('media-results-container');
+        const loadingSkeleton = document.getElementById('loading-skeleton');
+        const resultCard = document.getElementById('result-card');
+
+        const resTitle = document.getElementById('res-title');
+        const resAuthor = document.getElementById('res-author');
+        const resPlatformIcon = document.getElementById('res-platform-icon');
+        const resPlatformName = document.getElementById('res-platform-name');
+        const watermarkTab = document.getElementById('watermark-tab');
+
+        // Video Player Preview Elements
+        const previewVideoPlayer = document.getElementById('preview-video-player');
+        const previewVideoSource = document.getElementById('preview-video-source');
+
+        // Sample HTML5 playable media sources for live preview demo
+        const sampleVideos = {
+            youtube: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            tiktok: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            instagram: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            general: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+        };
+
+        // Toast Notification
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toast-msg');
+
+        function showToast(message) {
+            toastMsg.textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Real-Time URL Platform Detection
+        urlInput.addEventListener('input', () => {
+            const val = urlInput.value.toLowerCase().trim();
+            detectPlatform(val);
+        });
+
+        function detectPlatform(url) {
+            platformIcon.className = 'fas fa-link'; // default
+            
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                platformIcon.className = 'fab fa-youtube text-red-500';
+                return 'youtube';
+            } else if (url.includes('tiktok.com')) {
+                platformIcon.className = 'fab fa-tiktok text-cyan-400';
+                return 'tiktok';
+            } else if (url.includes('instagram.com')) {
+                platformIcon.className = 'fab fa-instagram text-pink-500';
+                return 'instagram';
+            } else if (url.includes('twitter.com') || url.includes('x.com')) {
+                platformIcon.className = 'fab fa-x-twitter text-slate-200';
+                return 'twitter';
+            } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                platformIcon.className = 'fab fa-facebook text-blue-500';
+                return 'facebook';
+            }
+            return 'general';
+        }
+
+        // Clipboard Paste Button
+        pasteBtn.addEventListener('click', async () => {
+            try {
+                const text = await navigator.clipboard.readText();
+                urlInput.value = text;
+                detectPlatform(text);
+                showToast('Pasted from clipboard!');
+            } catch (err) {
+                // Clipboard permissions fallback
+                urlInput.focus();
+                showToast('Please press Ctrl+V / Cmd+V to paste');
+            }
+        });
+
+        // Form Submit Simulation
+        fetchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            const platform = detectPlatform(url);
+
+            // Button Loading State
+            spinner.classList.remove('hidden');
+            btnArrow.classList.add('hidden');
+            btnText.textContent = 'Fetching media metadata...';
+            fetchSubmitBtn.disabled = true;
+
+            // Show Skeleton State
+            mediaResultsContainer.classList.remove('hidden');
+            loadingSkeleton.classList.remove('hidden');
+            resultCard.classList.add('hidden');
+
+            // Scroll smoothly to results
+            setTimeout(() => {
+                mediaResultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+
+            // Simulate Network Fetch Delay (1.2s)
+            setTimeout(() => {
+                spinner.classList.add('hidden');
+                btnArrow.classList.remove('hidden');
+                btnText.textContent = 'Fetch Video & Audio Options';
+                fetchSubmitBtn.disabled = false;
+
+                loadingSkeleton.classList.add('hidden');
+                resultCard.classList.remove('hidden');
+
+                // Update Preview Video Player Source
+                const videoSource = sampleVideos[platform] || sampleVideos.general;
+                previewVideoSource.src = videoSource;
+                previewVideoPlayer.load();
+
+                // Populate dynamic metadata based on detected platform
+                if (platform === 'youtube') {
+                    resTitle.textContent = 'Ultimate Web Development Course 2026 [Full HD]';
+                    resAuthor.innerHTML = '<i class="far fa-user text-slate-500"></i><span>Tech Academy</span>';
+                    resPlatformIcon.className = 'fab fa-youtube text-red-500';
+                    resPlatformName.textContent = 'YouTube';
+                    watermarkTab.classList.add('hidden');
+                } else if (platform === 'tiktok') {
+                    resTitle.textContent = 'Viral Trending Dance Challenge #2026';
+                    resAuthor.innerHTML = '<i class="far fa-user text-slate-500"></i><span>@creator_official</span>';
+                    resPlatformIcon.className = 'fab fa-tiktok text-cyan-400';
+                    resPlatformName.textContent = 'TikTok';
+                    watermarkTab.classList.remove('hidden');
+                } else if (platform === 'instagram') {
+                    resTitle.textContent = 'Beautiful Cinematic Travel Reel - Bali, Indonesia';
+                    resAuthor.innerHTML = '<i class="far fa-user text-slate-500"></i><span>@wanderlust_travels</span>';
+                    resPlatformIcon.className = 'fab fa-instagram text-pink-500';
+                    resPlatformName.textContent = 'Instagram Reels';
+                    watermarkTab.classList.add('hidden');
+                } else {
+                    resTitle.textContent = 'High Definition Shared Online Video Clip';
+                    resAuthor.innerHTML = '<i class="far fa-user text-slate-500"></i><span>Media Content Creator</span>';
+                    resPlatformIcon.className = 'fas fa-globe text-brand-400';
+                    resPlatformName.textContent = 'Web Video';
+                    watermarkTab.classList.add('hidden');
+                }
+
+                showToast('Video details & preview loaded!');
+            }, 1200);
+        });
+
+        // Tab Switcher
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabBtns.forEach(b => {
+                    b.classList.remove('active', 'text-brand-400', 'border-brand-500');
+                    b.classList.add('text-slate-400', 'border-transparent');
+                });
+
+                btn.classList.add('active', 'text-brand-400', 'border-brand-500');
+                btn.classList.remove('text-slate-400', 'border-transparent');
+
+                const targetTab = btn.getAttribute('data-tab');
+                tabContents.forEach(content => {
+                    if (content.id === targetTab) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // Download Trigger Simulation & Progress Bar
+        const downloadTriggers = document.querySelectorAll('.download-trigger');
+        const progressContainer = document.getElementById('download-progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressPercentage = document.getElementById('progress-percentage');
+        const progressStatusText = document.getElementById('progress-status-text');
+
+        downloadTriggers.forEach(btn => {
+            btn.addEventListener('click', () => {
+                progressContainer.classList.remove('hidden');
+                progressBar.style.width = '0%';
+                progressPercentage.textContent = '0%';
+                progressStatusText.textContent = 'Connecting to download server...';
+
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.floor(Math.random() * 25) + 10;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        progressStatusText.textContent = 'Download Complete! Saving file...';
+                        showToast('File downloaded successfully to your device.');
+                        setTimeout(() => {
+                            progressContainer.classList.add('hidden');
+                        }, 3000);
+                    }
+                    progressBar.style.width = `${progress}%`;
+                    progressPercentage.textContent = `${progress}%`;
+                }, 200);
+            });
+        });
+
+        // FAQ Accordion Toggle
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // Mobile Nav Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.classList.replace('fa-times', 'fa-bars');
+            } else {
+                menuIcon.classList.replace('fa-bars', 'fa-times');
+            }
+        });
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.replace('fa-times', 'fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>
